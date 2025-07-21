@@ -7,7 +7,7 @@ dt=`date +'%m-%d_%H-%M-%S'`
 torchrun --nnodes 1 --nproc_per_node 4 --master_port 10001 main.py \
     --seed 0 \
     --mode "train" \
-    --model-name "SeisGPT_dis" \
+    --model-name "SeisMoLLM_dis" \
     --log-base "./logs" \
     --log-step 500 \
     --data "/dev/shm/stead" \
