@@ -12,6 +12,8 @@ __all__ = ["STEAD", "STEAD_mag"]
 
 
 class STEAD(DatasetBase):
+    '''This may not work for downloaded original STEAD, 
+    as I spilt it into multiple slices for faster loading'''
     _part_range = None
     _name = "stead"
     _channels = ["e", "n", "z"]
@@ -146,6 +148,7 @@ class STEAD(DatasetBase):
 
 
 class STEAD_mag(STEAD):
+    # Only includes earthquake samples with ml magnitude type
     _name = "stead_mag"
     _part_range = None
     _channels = ["e", "n", "z"]
