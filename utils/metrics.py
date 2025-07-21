@@ -1,7 +1,6 @@
 import torch
 import torch.distributed as dist
 import numpy as np
-import math
 from .misc import reduce_tensor, gather_tensors_to_list
 from typing import Tuple
 import copy
@@ -13,13 +12,13 @@ from typing import List, Dict, Union
 class Metrics:
     """Compute metrics (batch-wise average).
 
-    Available metrics: `Precision`, `Recall`, `F1`, `Mean`, `Std`, `MAE`, `MAPE`, `R2`
+    Available metrics: `Precision`, `Recall`, `F1`, `Mean`, `Std`, `MAE`, `MAPE`, `RMSE`, `R2`
     """
 
     _epsilon = 1e-6
     _avl_regr_keys = ("sum_res", "sum_squ_res", "sum_abs_res", "sum_abs_per_res")
     _avl_cmat_keys = ("tp", "predp", "possp")
-    _avl_metrics = ("precision", "recall", "f1", "mean", "std", "mae", "mape", "r2")
+    _avl_metrics = ("precision", "recall", "f1", "mean", "std", "mae", "mape", "rmse", "r2")
 
 
     def __init__(
@@ -64,7 +63,7 @@ class Metrics:
         data_keys = self._metric_names
         if set(self._metric_names) & set(("precision", "recall", "f1")):
             data_keys += self._avl_cmat_keys
-        if set(self._metric_names) & set(("mean", "std", "mae", "mape")):
+        if set(self._metric_names) & set(("mean", "mae", "mape", "rmse")):
             data_keys += self._avl_regr_keys
 
         self._data={
@@ -204,7 +203,7 @@ class Metrics:
                 self._data["predp"] = torch.sum(preds, dim=0)
                 self._data["possp"] = torch.sum(targets, dim=0)
 
-        if set(self._metric_names) & set(("mean", "std", "mae", "mape", "r2")):
+        if set(self._metric_names) & set(("mean", "std", "mae", "mape", "rmse", "r2")):
             res = targets - preds
             # BAZ
             if self._task in ["baz"]:
@@ -216,9 +215,12 @@ class Metrics:
                 self._data["sum_res"] = (res * mask).type(torch.float32).mean(-1).sum()
 
             if "std" in self._metric_names:
-                self._data["sum_squ_res"] = (
-                    torch.pow(res * mask, 2).type(torch.float32).mean(-1).sum()
-                )
+                if "sum_res" not in self._data:
+                    self._data["sum_res"] = (res * mask).type(torch.float32).mean(-1).sum()
+                if "sum_squ_res" not in self._data:
+                    self._data["sum_squ_res"] = (
+                        torch.pow(res * mask, 2).type(torch.float32).mean(-1).sum()
+                    ) 
 
             if "mae" in self._metric_names:
                 self._data["sum_abs_res"] = (
@@ -232,6 +234,11 @@ class Metrics:
                     .type(torch.float32)
                     .mean(-1)
                     .sum()
+                )
+
+            if "rmse" in self._metric_names:
+                self._data["sum_squ_res"] = (
+                    torch.pow(res * mask, 2).type(torch.float32).mean(-1).sum()
                 )
 
             if "r2" in self._metric_names:
@@ -308,14 +315,17 @@ class Metrics:
         elif key == "mean":
             v = self._data["mean"] = self._data["sum_res"] / self._data["data_size"]
         elif key == "std":
-            v = self._data["std"] = torch.sqrt(
-                self._data["sum_squ_res"] / self._data["data_size"]
-            )
+            mean = self._data["sum_res"] / self._data["data_size"]
+            v = self._data["std"] = torch.sqrt(self._data["sum_squ_res"] / self._data["data_size"] - mean**2)
         elif key == "mae":
             v = self._data["mae"] = self._data["sum_abs_res"] / self._data["data_size"]
         elif key == "mape":
             v = self._data["mape"] = (
                 self._data["sum_abs_per_res"] / self._data["data_size"]
+            )
+        elif key == "rmse":
+            v = self._data["rmse"] = torch.sqrt(
+                self._data["sum_squ_res"] / self._data["data_size"]
             )
         elif key == "r2":
             t = self._tgts - self._tgts.mean()
