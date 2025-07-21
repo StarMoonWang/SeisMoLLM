@@ -19,8 +19,8 @@ def get_args():
                         help="train/test/train_test (default:'train_test')")
 
     # Model
-    parser.add_argument("--model-name", default="seist_m_dpk", type=str, metavar="MODEL_NAME",
-                        help="model name: 'phasenet/eqtransformer/magnet/ditingmotion/seist' (default: seist_l_dpk)")
+    parser.add_argument("--model-name", default="SeisMoLLM_dpk", type=str, metavar="MODEL_NAME",
+                        help="model name: 'phasenet/eqtransformer/magnet/ditingmotion/seist/SeisMoLLM' ")
     parser.add_argument("--checkpoint", default="", type=str, metavar="CHECKPOINT",
                         help="path to latest checkpoint (default: none)")
     parser.add_argument("--use-torch-compile", type=bool_, default=True, metavar="USE_TORCH_COMPILE",
@@ -152,11 +152,11 @@ def get_args():
                         help="maximum learning rate (default: 1e-3)")
     parser.add_argument("--warmup-steps", default=2000, type=float, metavar="WARMUP_STEPS",
                         help="number of training iterations in the increasing half of a cycle."
-                        " If `0 < warmup_steps < 1`, it will be treated as a ratio of total steps. (default: 1000)")
+                        " If `0 < warmup_steps < 1`, it will be treated as a ratio of total steps. (default: 2000)")
     parser.add_argument("--down-steps", default=3000, type=float, metavar="DOWN_STEPS",
                         help="number of training iterations in the decreasing half of a cycle."
                         " If `0 < down_steps < 1`, it will be treated as a ratio of total steps."
-                        " If `down_steps == 0`, it will be set to `steps - warmup_steps`(default: 1000)")
+                        " If `down_steps == 0`, it will be set to `steps - warmup_steps`(default: 3000)")
 
     # Val/Test
     parser.add_argument("--time-threshold", default=0.1, type=float, metavar="TIME_THRESHOLD",
