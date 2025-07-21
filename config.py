@@ -255,6 +255,7 @@ class Config:
         "std",
         "mae",
         "mape",
+        "rmse",
         "r2",
     )
 
@@ -282,12 +283,12 @@ class Config:
         # -------------------------------------------------------------------------- P(p)
         "ppk": {
             "type": "soft",
-            "metrics": ["precision", "recall", "f1", "mean", "std", "mae", "mape"],
+            "metrics": ["precision", "recall", "f1", "mean", "std", "mae", "mape", "rmse"],
         },
         # -------------------------------------------------------------------------- P(s)
         "spk": {
             "type": "soft",
-            "metrics": ["precision", "recall", "f1", "mean", "std", "mae", "mape"],
+            "metrics": ["precision", "recall", "f1", "mean", "std", "mae", "mape", "rmse"],
         },
         # -------------------------------------------------------------------------- P(p+)
         "ppk+": {"type": "soft", "metrics": []},
@@ -296,17 +297,17 @@ class Config:
         # -------------------------------------------------------------------------- P(d+)
         "det+": {"type": "soft", "metrics": []},
         # -------------------------------------------------------------------------- Phase-P indices
-        "ppks": {"type": "value", "metrics": ["mean", "std", "mae", "mape", "r2"]},
+        "ppks": {"type": "value", "metrics": ["mean", "std", "mae", "mape", "rmse", "r2"]},
         # -------------------------------------------------------------------------- Phase-S indices
-        "spks": {"type": "value", "metrics": ["mean", "std", "mae", "mape", "r2"]},
+        "spks": {"type": "value", "metrics": ["mean", "std", "mae", "mape", "rmse", "r2"]},
         # -------------------------------------------------------------------------- Event magnitude
-        "emg": {"type": "value", "metrics": ["mean", "std", "mae", "r2"]},
+        "emg": {"type": "value", "metrics": ["mean", "std", "mae", "rmse", "r2"]},
         # -------------------------------------------------------------------------- Station magnitude
-        "smg": {"type": "value", "metrics": ["mean", "std", "mae", "r2"]},
+        "smg": {"type": "value", "metrics": ["mean", "std", "mae", "rmse", "r2"]},
         # -------------------------------------------------------------------------- Back azimuth
-        "baz": {"type": "value", "metrics": ["mean", "std", "mae", "r2"]},
+        "baz": {"type": "value", "metrics": ["mean", "std", "mae", "rmse", "r2"]},
         # -------------------------------------------------------------------------- Distance
-        "dis": {"type": "value", "metrics": ["mean", "std", "mae", "r2"]},
+        "dis": {"type": "value", "metrics": ["mean", "std", "mae", "rmse", "r2"]},
         # -------------------------------------------------------------------------- P motion polarity
         "pmp": {
             "type": "onehot",
