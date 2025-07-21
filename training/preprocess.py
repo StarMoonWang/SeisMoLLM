@@ -242,7 +242,7 @@ class DataPreprocessor:
 
             elif input_len < window_size:
                 data = np.concatenate(
-                    data, np.zeros((data.shape[0], window_size - input_len)), axis=1
+                    [data, np.zeros((data.shape[0], window_size - input_len))], axis=1
                 )
 
         return data, ppks, spks
@@ -506,14 +506,14 @@ class DataPreprocessor:
             if np.random.random() < self.add_gap_rate:
                 data = self._add_gaps(data, ppks, spks)
 
-        if self.mask_percent > 0:
+        if self.noise_percent > 0:
             data = self._add_noise_windows(
                 data=data,
                 percent=self.mask_percent,
                 window_size=self.sampling_rate // 2,
             )
 
-        if self.noise_percent > 0:
+        if self.mask_percent > 0:
             data = self._add_mask_windows(
                 data=data,
                 percent=self.noise_percent,
