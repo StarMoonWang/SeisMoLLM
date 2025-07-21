@@ -5,7 +5,7 @@ dt=`date +'%Y-%m-%d_%H-%M-%S'`
 torchrun --nnodes 1 --nproc_per_node 4 main.py \
     --seed 0 \
     --mode "test" \
-    --model-name "SeisGPT_emg" \
+    --model-name "SeisMoLLM_emg" \
     --checkpoint  "./checkpoints/model-xx.pth" \
     --log-base "./logs" \
     --log-step 250 \
