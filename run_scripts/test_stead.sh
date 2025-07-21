@@ -5,7 +5,7 @@ dt=`date +'%Y-%m-%d_%H-%M-%S'`
 python main.py \
     --seed 0 \
     --mode "test" \
-    --model-name "SeisGPT_dpk" \
+    --model-name "SeisMoLLM_dpk" \
     --checkpoint  "./checkpoints/model-xx.pth" \
     --log-base "./logs" \
     --log-step 250 \
