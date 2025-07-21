@@ -3,7 +3,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch._dynamo.config
-import torch.utils.checkpoint as checkpoint
 from einops import rearrange
 import transformers.models.gpt2 as GPT2
 from peft import get_peft_model, LoraConfig
@@ -423,6 +422,7 @@ class SeisMoLLM(nn.Module):
 @register_model
 def SeisMoLLM_dpk(**kwargs):
     """Detection and Phase-Picking."""
+    # Only for picking in this work, you can add detection by modifying config.py
     model = SeisMoLLM(
         path_drop_rate=0.3,
         attn_drop_rate=0.3,
@@ -431,7 +431,7 @@ def SeisMoLLM_dpk(**kwargs):
         other_drop_rate=0.3,
         output_head=partial(
             HeadDetectionPicking, out_act_layer=nn.Sigmoid, out_channels=3
-        ),
+        ),  # actually in use channel is 2
         **kwargs,
     )
     return model
