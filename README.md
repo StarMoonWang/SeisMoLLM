@@ -25,8 +25,8 @@
 
 ## 🔥 Introduction
 Large-scale pretraining for seismic monitoring remains challenging due to the lack of effective pretraining algorithms, the high cost of training, and the significant variations across existing datasets. These obstacles have seriously hindered the development of domain foundation models. 
-SeisMoLLM is the first work to explore the **cross-modality transfer** strategy for seismic monitoring, unleashing the power of pretraing by adapting a pretrained LLM (GPT-2 here) to build a powerflu and general-purpose model.  
-With a unified network architecture, SeisMoLLM can handle various seismic monitoring tasks, including back-azimuth estimation, epicentral distance estimation, magnitude estimation, phase picking, and first-motion polarity classification, demonstrating its potential as a foundation model for seismology.
+SeisMoLLM is the first work to explore the **cross-modality transfer** strategy for seismic monitoring, unleashing the power of pretraing by adapting a pretrained LLM (GPT-2 here) to build a powerflu and general-purpose framework.  
+With a unified network architecture, SeisMoLLM can handle various seismic monitoring tasks, including back-azimuth estimation, epicentral distance estimation, magnitude estimation, phase picking, and first-motion polarity classification, demonstrating its potential as a framework for seismic foundation model.
 <p align = "center">  
 <img src="figures/model.jpg" width="70%">
 </p>
@@ -52,10 +52,13 @@ relative improvements ranging from 10% to 50% compared to advanced baselines.
 
 ### 🛠️ Preparation
 - Install required environment by running ` pip install -r requirements.txt `
-- Download required datasets, you can find STEAD at the [STEAD repo](https://github.com/smousavi05/STEAD), and DiTing dataset requires a request for access, please contact the authors of its paper. Then change the `--data` to your local data path.
-- Prepare pre-trained GPT-2 model files at [huggingface gpt2](https://huggingface.co/openai-community/gpt2/tree/main) and place them in the `your_dir/GPT2` directory, then change the **GPT_file_path** in `models/SeisMoLLM.py` to `your_dir`. We suggest to download manually because huggingface is blocked in many areas.
+- Download required datasets, you can find STEAD at the [STEAD repo](https://github.com/smousavi05/STEAD), and DiTing dataset requires a request for access, please contact the authors of its paper. Then change the `--data` to your local data path in bash scripts.
+- Prepare pre-trained GPT-2 model files from the [huggingface gpt2](https://huggingface.co/openai-community/gpt2/tree/main) and place them in the `your_dir/GPT2` directory, then change the **GPT_file_path** in `models/SeisMoLLM.py` to `your_dir`. We suggest to download manually because huggingface is blocked in many areas.
+- Get all the checkpoints, including baselines, from the [huggingface repo](https://huggingface.co/Starry-Wang/SeisMoLLM) if you want to use our trained models.
 
 ### 🚀 Running
+We provide `inference_demo.ipynb` to show how SeisMoLLM works across all tasks. For single-sample inference, please take a look at this notebook. (Sorry for any inconvinience: the comments are in Chinese, as it's originally prepared for my talk at the China Earthquake Administration.) We also plan to add a short tutorial on how to integrate custom models or datasets into this codebase, along with key caveats, please stay tuned.
+
 To start training or evaluation, run the scripts in `run_scripts`. Try `python main.py --help` to see description of every hyperparameter so you can tune the arguments. For model selection, the task abbreviations used in the model names are listed in the table below:
 
   <div align="center">

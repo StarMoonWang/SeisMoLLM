@@ -1,5 +1,5 @@
 from .base import DatasetBase
-from typing import Tuple
+from typing import Optional,Tuple
 import os
 import pandas as pd
 import numpy as np
@@ -12,8 +12,7 @@ __all__ = ["STEAD", "STEAD_mag"]
 
 
 class STEAD(DatasetBase):
-    '''This may not work for downloaded original STEAD, 
-    as I spilt it into multiple slices for faster loading'''
+    '''This is for original downloaded STEAD in merged files '''
     _part_range = None
     _name = "stead"
     _channels = ["e", "n", "z"]
@@ -40,11 +39,10 @@ class STEAD(DatasetBase):
             val_size=val_size,
         )
 
-    def _load_meta_data(self,filename = "eq.csv") -> pd.DataFrame:
+    def _load_meta_data(self,filename = None) -> pd.DataFrame:
         meta_df = pd.read_csv(
-            os.path.join(self._data_dir, filename),
+            os.path.join(self._data_dir, f"merge.csv"),
                 dtype={
-                        "file_idx": int,
                         "trace_name": str,
                         "trace_category": str,
                         "source_id": str,
@@ -59,8 +57,11 @@ class STEAD(DatasetBase):
                         "back_azimuth_deg": np.float32,
                         "snr_db": str
                     },
-                    low_memory=False
+                    low_memory=False,
+                    index_col=0,
                 )
+        
+        meta_df = meta_df[meta_df["trace_category"] == "earthquake_local"]
 
         if self._shuffle:
             meta_df = meta_df.sample(frac=1, replace=False, random_state=self._seed)
@@ -81,7 +82,6 @@ class STEAD(DatasetBase):
             logger.info(f"Data Split: {self._mode}: {r[0]}-{r[1]}")
 
         return meta_df
-    
 
     def _load_event_data(self, idx:int) -> Tuple[dict,dict]:
         """Load evnet data
@@ -98,21 +98,21 @@ class STEAD(DatasetBase):
         """        
     
         target_event = self._meta_data.iloc[idx]
-        file, trace = target_event['file_idx'], target_event['trace_name']
+        trace = target_event['trace_name']
 
-        path = os.path.join(self._data_dir, f"part_{file}.hdf5")
+        path = os.path.join(self._data_dir, f"merge.hdf5")
         with h5py.File(path, "r") as f:
             dataset = f.get("data/" + str(trace))
             data = np.array(dataset).astype(np.float32).T
 
         (   ppk,spk,
             mag_type,evmag,
-            baz, dis, ptt, snr
+            baz, dis, snr
         ) = itemgetter(
             "p_arrival_sample","s_arrival_sample",
             "source_magnitude_type","source_magnitude",
             "back_azimuth_deg", "source_distance_km",
-            "p_travel_sec", "snr_db" 
+            "snr_db"
             )(
             target_event
             )
@@ -139,7 +139,6 @@ class STEAD(DatasetBase):
             "emg" : [evmag] if pd.notnull(evmag) else [],
             "baz" : [baz] if pd.notnull(baz) else [],
             "dis" : [dis] if pd.notnull(dis) else [],
-            "ptt" : [ptt] if pd.notnull(ptt) else [],
             "snr" : snr,
         }
         target = target_event.to_dict()
@@ -148,7 +147,6 @@ class STEAD(DatasetBase):
 
 
 class STEAD_mag(STEAD):
-    # Only includes earthquake samples with ml magnitude type
     _name = "stead_mag"
     _part_range = None
     _channels = ["e", "n", "z"]
@@ -202,7 +200,6 @@ def stead(**kwargs):
 def stead_mag(**kwargs):
     dataset = STEAD_mag(**kwargs)
     return dataset
-
 
 
 

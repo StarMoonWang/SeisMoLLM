@@ -1,7 +1,7 @@
 from .meters import AverageMeter, ProgressMeter
 from .metrics import Metrics
 from .logger import logger
-from .visualization import vis_waves_preds_targets,vis_phase_picking
+from .visualization import vis_waves_preds_targets,vis_detection_picking,vis_phase_picking
 from .misc import (
     setup_seed,
     get_time_str,
