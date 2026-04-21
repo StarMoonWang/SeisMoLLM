@@ -2,7 +2,7 @@
 <div align="center">
 
 [![License: MIT License](https://img.shields.io/github/license/StarMoonWang/SeisMoLLM)](https://opensource.org/license/MIT)
-[![arXiv](https://img.shields.io/badge/arXiv-2502.19960-b31b1b)](https://arxiv.org/abs/2502.19960)
+[![Geophysical Research Letters](https://img.shields.io/badge/GRL-118505-b31b1b)](https://doi.org/10.1029/2025GL118505)
 
 ## [**SeisMoLLM: Advancing Seismic Monitoring via Cross-modal Transfer <br> with Pretrained Large Language Model**](https://arxiv.org/abs/2502.19960)
 
@@ -94,13 +94,19 @@ Our code is developed based on [SeisT](https://github.com/senli1073/SeisT) codeb
 ## 🎓 Citation
 Hopefully, if our work helps, please give us a star ⭐ or cite this work with:  
 ```
-@misc{wang2025seismollmadvancingseismicmonitoring,
-      title={SeisMoLLM: Advancing Seismic Monitoring via Cross-modal Transfer with Pre-trained Large Language Model}, 
-      author={Xinghao Wang and Feng Liu and Rui Su and Zhihui Wang and Lihua Fang and Lianqing Zhou and Lei Bai and Wanli Ouyang},
-      year={2025},
-      eprint={2502.19960},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG},
-      url={https://arxiv.org/abs/2502.19960}, 
+@article{https://doi.org/10.1029/2025GL118505,
+author = {Xinghao, Wang and Liu, Feng and Su, Rui and Wang, Zhihui and Fang, Lihua and Zhou, Lianqing and Bai, Lei and Ouyang, Wanli},
+title = {SeisMoLLM: Advancing Seismic Monitoring via Cross-Modal Transfer With Pretrained Large Language Model},
+journal = {Geophysical Research Letters},
+volume = {53},
+number = {8},
+pages = {e2025GL118505},
+keywords = {seismic monitoring, deep learning, foundation model, phase picking, earthquake location, magnitude estimation},
+doi = {https://doi.org/10.1029/2025GL118505},
+url = {https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2025GL118505},
+eprint = {https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/2025GL118505},
+note = {e2025GL118505 2025GL118505},
+abstract = {Abstract Recent advances in deep learning have transformed seismic monitoring, yet most existing methods remain task-specific and data-limited, restricting performance on challenging scenarios and generalization to unseen data. Large-scale pretraining has addressed similar limitations in other fields, but its application to seismic data faces challenges, including the absence of effective pretraining algorithms, fragmented data sets, and prohibitive computational costs. Here, we propose SeisMoLLM, a novel approach that cross-modally transfers the sequence modeling knowledge of pretrained large language models into a unified framework adaptable to various tasks, unlocking pretraining benefits for seismic monitoring. Evaluations on STEAD and DiTing data sets demonstrates SeisMoLLM outperforms leading methods and generalizes strongly across multiple tasks, with notable improvements of 10\%–50\%, while maintaining training costs comparable to small baselines and faster inference than the smallest baseline. These results establish SeisMoLLM as a promising framework for foundation models and highlight cross-modal transfer as a compelling direction for advancing seismic monitoring.},
+year = {2026}
 }
 ```
